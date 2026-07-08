@@ -1,4 +1,5 @@
 import httpx
+from fastapi import HTTPException
 from app.core.config import settings
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -38,13 +39,29 @@ Write the pandas code."""
     }
 
     async with httpx.AsyncClient(timeout=60.0) as client:
-        response = await client.post(OPENROUTER_URL, json=payload, headers=headers)
-        response.raise_for_status()
-        data = response.json()
+        try:
+            response = await client.post(OPENROUTER_URL, json=payload, headers=headers)
+        except httpx.TimeoutException:
+            raise HTTPException(status_code=504, detail="The AI model took too long to respond. Please try again.")
+        except httpx.RequestError:
+            raise HTTPException(status_code=503, detail="Could not reach the AI service. Check your internet connection.")
+
+    if response.status_code == 429:
+        raise HTTPException(status_code=429, detail="Rate limit reached on the free AI model. Please wait a minute and try again.")
+
+    if response.status_code == 404:
+        raise HTTPException(status_code=503, detail="The configured AI model is currently unavailable. Try again later.")
+
+    if response.status_code != 200:
+        raise HTTPException(status_code=502, detail=f"AI service returned an error (status {response.status_code}).")
+
+    data = response.json()
+
+    if "choices" not in data or not data["choices"]:
+        raise HTTPException(status_code=502, detail="AI service returned an unexpected response format.")
 
     code = data["choices"][0]["message"]["content"]
 
-    # Strip markdown code fences if the model adds them anyway
     code = code.strip()
     if code.startswith("```"):
         lines = code.split("\n")
