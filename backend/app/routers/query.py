@@ -9,6 +9,9 @@ router = APIRouter(prefix="/api", tags=["query"])
 
 @router.post("/query", response_model=QueryResponse)
 async def query_data(request: QueryRequest):
+    if not request.question or not request.question.strip():
+        raise HTTPException(status_code=400, detail="Question cannot be empty.")
+
     df = get_dataframe(request.session_id)
     if df is None:
         raise HTTPException(status_code=404, detail="Session not found. Please re-upload the file.")
