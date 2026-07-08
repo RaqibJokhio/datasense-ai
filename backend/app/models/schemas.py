@@ -20,3 +20,7 @@ class QueryResponse(BaseModel):
     generated_code: str
     result_type: str
     result_data: Any
+
+class AnomalyResponse(BaseModel):
+    columns_analyzed: list[str]
+    anomalies: dict[str, Any]
