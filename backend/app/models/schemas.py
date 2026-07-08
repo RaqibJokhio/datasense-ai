@@ -10,3 +10,13 @@ class UploadResponse(BaseModel):
 
 class ErrorResponse(BaseModel):
     detail: str
+
+class QueryRequest(BaseModel):
+    session_id: str
+    question: str
+
+class QueryResponse(BaseModel):
+    question: str
+    generated_code: str
+    result_type: str
+    result_data: Any
