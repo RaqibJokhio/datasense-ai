@@ -9,17 +9,33 @@ function App() {
   const [uploadData, setUploadData] = useState(null);
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
-      <h1>DataSense AI</h1>
-      <p>Upload a CSV or Excel file and ask questions about your data.</p>
+    <div className="app-shell">
+      <header className="app-header">
+        <p className="eyebrow">DataSense AI</p>
+        <h1>Ask your data anything</h1>
+        <p>Upload a CSV or Excel file, ask plain-English questions, and get pandas-generated answers, charts, and outlier detection.</p>
+      </header>
 
-      <FileUpload onUploadSuccess={setUploadData} />
+      <div className="card">
+        <h3>Upload dataset</h3>
+        <FileUpload onUploadSuccess={setUploadData} />
+      </div>
 
       {uploadData && (
         <>
-          <DataPreview data={uploadData} />
-          <QueryInterface sessionId={uploadData.session_id} />
-          <AnomalyDetector sessionId={uploadData.session_id} />
+          <div className="card">
+            <DataPreview data={uploadData} />
+          </div>
+
+          <div className="card">
+            <h3>Ask a question</h3>
+            <QueryInterface sessionId={uploadData.session_id} />
+          </div>
+
+          <div className="card">
+            <h3>Anomaly detection</h3>
+            <AnomalyDetector sessionId={uploadData.session_id} />
+          </div>
         </>
       )}
     </div>

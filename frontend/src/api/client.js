@@ -24,3 +24,19 @@ export const getAnomalies = async (sessionId) => {
   const response = await axios.get(`${API_BASE_URL}/anomalies/${sessionId}`);
   return response.data;
 };
+
+export const downloadAnomaliesCsv = async (sessionId, column) => {
+  const response = await axios.get(`${API_BASE_URL}/anomalies/${sessionId}/download`, {
+    params: { column },
+    responseType: 'blob',
+  });
+
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `anomalies_${column}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+};

@@ -2,18 +2,16 @@ function DataPreview({ data }) {
   if (!data) return null;
 
   return (
-    <div style={{ marginTop: '20px' }}>
+    <div>
       <h3>{data.filename}</h3>
-      <p>{data.rows} rows, {data.columns.length} columns</p>
+      <p className="meta-line">{data.rows.toLocaleString()} rows &middot; {data.columns.length} columns</p>
 
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+      <div className="data-table-wrap">
+        <table>
           <thead>
             <tr>
               {data.columns.map((col) => (
-                <th key={col} style={{ border: '1px solid #ddd', padding: '8px', background: '#f4f4f4' }}>
-                  {col}
-                </th>
+                <th key={col}>{col}</th>
               ))}
             </tr>
           </thead>
@@ -21,9 +19,7 @@ function DataPreview({ data }) {
             {data.preview.map((row, i) => (
               <tr key={i}>
                 {data.columns.map((col) => (
-                  <td key={col} style={{ border: '1px solid #ddd', padding: '8px' }}>
-                    {String(row[col])}
-                  </td>
+                  <td key={col}>{String(row[col])}</td>
                 ))}
               </tr>
             ))}

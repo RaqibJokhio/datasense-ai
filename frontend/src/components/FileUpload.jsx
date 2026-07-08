@@ -23,15 +23,15 @@ function FileUpload({ onUploadSuccess }) {
   };
 
   return (
-    <div style={{ padding: '20px', border: '2px dashed #ccc', borderRadius: '8px' }}>
+    <div className="upload-zone">
       <input
         type="file"
         accept=".csv,.xlsx,.xls"
         onChange={handleFileChange}
         disabled={isUploading}
       />
-      {isUploading && <p>Uploading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {isUploading && <p className="upload-status">Uploading and parsing file...</p>}
+      {error && <p className="error-text">{error}</p>}
     </div>
   );
 }

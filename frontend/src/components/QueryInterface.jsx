@@ -29,29 +29,34 @@ function QueryInterface({ sessionId }) {
     if (!result) return null;
 
     return (
-      <div style={{ marginTop: '20px' }}>
-        <p><strong>Generated code:</strong></p>
-        <pre style={{ background: '#f4f4f4', padding: '10px', borderRadius: '4px', overflowX: 'auto' }}>
-          {result.generated_code}
-        </pre>
+      <div className="result-block">
+        <p className="result-label">Generated code</p>
+        <div className="code-console">
+          <div className="code-console-bar">
+            <span className="code-console-dot"></span>
+            <span className="code-console-dot"></span>
+            <span className="code-console-dot"></span>
+          </div>
+          <pre>{result.generated_code}</pre>
+        </div>
 
-        <p><strong>Result:</strong></p>
+        <p className="result-label">Result</p>
         {result.result_type === 'chart' && (
-          <img src={result.result_data} alt="Query result chart" style={{ maxWidth: '100%' }} />
+          <div className="result-chart">
+            <img src={result.result_data} alt="Query result chart" />
+          </div>
         )}
         {result.result_type === 'value' && (
-          <p style={{ fontSize: '1.2em' }}>{String(result.result_data)}</p>
+          <p className="result-value">{String(result.result_data)}</p>
         )}
         {result.result_type === 'table' && (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+          <div className="data-table-wrap">
+            <table>
               <thead>
                 <tr>
                   {result.result_data.length > 0 &&
                     Object.keys(result.result_data[0]).map((col) => (
-                      <th key={col} style={{ border: '1px solid #ddd', padding: '8px', background: '#f4f4f4' }}>
-                        {col}
-                      </th>
+                      <th key={col}>{col}</th>
                     ))}
                 </tr>
               </thead>
@@ -59,9 +64,7 @@ function QueryInterface({ sessionId }) {
                 {result.result_data.map((row, i) => (
                   <tr key={i}>
                     {Object.values(row).map((val, j) => (
-                      <td key={j} style={{ border: '1px solid #ddd', padding: '8px' }}>
-                        {String(val)}
-                      </td>
+                      <td key={j}>{String(val)}</td>
                     ))}
                   </tr>
                 ))}
@@ -74,22 +77,21 @@ function QueryInterface({ sessionId }) {
   };
 
   return (
-    <div style={{ marginTop: '30px' }}>
-      <form onSubmit={handleSubmit}>
+    <div>
+      <form className="query-form" onSubmit={handleSubmit}>
         <input
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask a question about your data..."
-          style={{ width: '70%', padding: '10px' }}
+          placeholder="e.g. What is the average sales price?"
           disabled={isLoading}
         />
-        <button type="submit" disabled={isLoading} style={{ padding: '10px 20px', marginLeft: '10px' }}>
+        <button type="submit" disabled={isLoading}>
           {isLoading ? 'Thinking...' : 'Ask'}
         </button>
       </form>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
       {renderResult()}
     </div>
   );
