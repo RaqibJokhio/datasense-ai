@@ -19,3 +19,8 @@ export const queryData = async (sessionId, question) => {
   });
   return response.data;
 };
+
+export const getAnomalies = async (sessionId) => {
+  const response = await axios.get(`${API_BASE_URL}/anomalies/${sessionId}`);
+  return response.data;
+};

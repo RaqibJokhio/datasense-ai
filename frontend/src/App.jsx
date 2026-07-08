@@ -2,6 +2,7 @@ import { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import DataPreview from './components/DataPreview';
 import QueryInterface from './components/QueryInterface';
+import AnomalyDetector from './components/AnomalyDetector';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <>
           <DataPreview data={uploadData} />
           <QueryInterface sessionId={uploadData.session_id} />
+          <AnomalyDetector sessionId={uploadData.session_id} />
         </>
       )}
     </div>
