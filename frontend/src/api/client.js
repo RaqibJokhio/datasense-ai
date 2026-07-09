@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const API_BASE_URL = 'https://datasense-ai-p92j.onrender.com/api';
 
 export const uploadFile = async (file) => {
   const formData = new FormData();
@@ -13,10 +13,11 @@ export const uploadFile = async (file) => {
 };
 
 export const queryData = async (sessionId, question) => {
-  const response = await axios.post(`${API_BASE_URL}/query`, {
-    session_id: sessionId,
-    question: question,
-  });
+  const response = await axios.post(
+    `${API_BASE_URL}/query`,
+    { session_id: sessionId, question: question },
+    { timeout: 30000 }
+  );
   return response.data;
 };
 
